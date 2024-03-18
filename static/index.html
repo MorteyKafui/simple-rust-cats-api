@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>Catdex</title>
+    <link rel="stylesheet" href="static/css/index.css" type="text/css" />
+  </head>
+  <body>
+    <h1>Catdex</h1>
+    <section class="cats">
+      <article class="cat">
+        <h3>British short hair</h3>
+        <img src="image/cat-1.jpg" />
+      </article>
+      <article class="cat">
+        <h3>Persian</h3>
+        <img src="image/cat-2.jpg" />
+      </article>
+      <article class="cat">
+        <h3>Ragdoll</h3>
+        <img src="image/cat-3.webp" />
+      </article>
+    </section>
+
+    <script charset="utf-8">
+      const getCats = async () => {
+        const res = await fetch("/api/cats");
+        const data = await res.json();
+
+        return data;
+      };
+
+      document.addEventListener("DOMContentLoaded", async () => {
+        const cats = await getCats();
+
+        // Clear the "No cats yet"
+        document.querySelector(".cats").innerText = "";
+
+        for (const cat of cats) {
+          const catElement = document.createElement("article");
+          catElement.classList.add("cat");
+          const catTitle = document.createElement("h3");
+          const catLink = document.createElement("a");
+          catLink.innerText = cat.name;
+          catLink.href = "static/cat.html?id=${cat.id}";
+          const catImage = document.createElement("img");
+          catImage.src = cat.image_path;
+          catTitle.appendChild(catLink);
+          catElement.appendChild(catTitle);
+          catElement.appendChild(catImage);
+          document.querySelector(".cats").appendChild(catElement);
+        }
+      });
+    </script>
+  </body>
+</html>
